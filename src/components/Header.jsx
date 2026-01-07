@@ -29,7 +29,7 @@ const Header = ({ user }) => {
       <header className="header-upper py-4">
         <div className="container mx-auto flex justify-between items-center">
           <NavLink to="/">
-            <h2 className="text-2xl font-bold text-white uppercase">simple.</h2>
+            <h2 className="text-2xl font-bold text-white uppercase">simp1e.</h2>
           </NavLink>
           <div className="flex">
             <Input
@@ -37,8 +37,8 @@ const Header = ({ user }) => {
               placeholder="Search products..."
               className="ml-4 w-100 bg-white"
             />
-            <Button className="search-btn cursor-pointer">
-              <i className="fa-solid fa-magnifying-glass"></i>
+            <Button className="search-btn cursor-pointer hover:text-black">
+              <i className="fa-solid fa-magnifying-glass "></i>
             </Button>
           </div>
           <div className="flex justify-around items-center gap-4">

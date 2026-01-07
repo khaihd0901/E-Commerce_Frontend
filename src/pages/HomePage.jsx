@@ -1,9 +1,17 @@
+import Categories from '@/components/Categories';
+import FeaturedCollection from '@/components/FeaturedCollection';
+import ServicesBar from '@/components/ServicesBar';
+import TopBanner from '@/components/TopBanner';
 import React, {  } from 'react'
-
-function HomePage({user}) {
+const HomePage = () => {
   return (
-    <div className='text-3xl font-bold'>Hello {user?.displayName || 'Guest'}!</div>
-  )
-}
+    <section className="px-4 py-6">
+        <TopBanner/>
+        <ServicesBar/>
+        <Categories/>
+        <FeaturedCollection/>
+    </section>
+  );
+};
 
-export default HomePage
+export default HomePage;

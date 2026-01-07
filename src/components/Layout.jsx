@@ -3,16 +3,19 @@ import Header from "./Header.jsx";
 import Footer from "./Footer.jsx";
 import { Outlet } from "react-router";
 
-const Layout = ({user}) => {
+const Layout = ({ user }) => {
   return (
-    <div className="">
+    <div className="min-h-screen overflow-x-hidden">
       <Header user={user} />
-      <main  className="flex justify-center container mx-auto px-4">
-        <Outlet/>
+
+      <main className="mx-auto container">
+        <Outlet />
       </main>
+
       <Footer />
     </div>
   );
 };
+
 
 export default Layout;
