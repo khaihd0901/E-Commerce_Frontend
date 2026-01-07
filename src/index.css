@@ -4,22 +4,44 @@
 @custom-variant dark (&:is(.dark *));
 @config "../tailwind.config.js";
 
+
 @layer base {
+  .header-top-strip {
+    background-color: var(--color-131921);
+    border-bottom: 1px solid var(--color-3b4149);
+  }
+  .header-upper {
+    background-color: var(--color-131921);
+  }
+  .search-btn{
+    background-color: var(--color-febd69);
+  }
+  .header-bottom {
+    background-color: var(--color-232f3e);
+    border-top: 1px solid var(--color-3b4149);
+  }
   :root {
+    --color-232f3e: #232f3e;
+    --color-131921: #131921;
+    --color-3b4149: #3b4149;
+    --color-fdaa3d: #fdaa3d;
+    --color-febd69: #febd69;
     /* Modern todo app color palette */
     --background: 240 10% 98%;
     --background-secondary: 245 15% 96%;
-    --foreground: 215 28% 27%; /* slate 700 */
+    --foreground: 215 28% 27%;
+    /* slate 700 */
 
     --card: 0 0% 100%;
     --card-foreground: 215 28% 27%;
-    --card-shadow: 218 36% 18%; /* slate 800 */
+    --card-shadow: 218 36% 18%;
+    /* slate 800 */
 
     --popover: 0 0% 100%;
     --popover-foreground: 215 28% 27%;
 
     /* Beautiful gradient colors */
-    --primary: 258 89% 65%;
+    --primary: #131313;
     --primary-light: 255 92% 76%;
     --primary-dark: 263 69% 50%;
     --primary-foreground: 0 0% 100%;
@@ -28,7 +50,8 @@
     --secondary-foreground: 240 6% 10%;
 
     --muted: 240 5% 96%;
-    --muted-foreground: 215 18% 47%; /* slate-500 */
+    --muted-foreground: 215 18% 47%;
+    /* slate-500 */
 
     --accent: 204 94% 94%;
     --accent-foreground: 204 100% 40%;
@@ -42,26 +65,21 @@
     --info: 226, 100%, 63%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 214 32% 91%; /* slate-200 */
+    --border: 214 32% 91%;
+    /* slate-200 */
     --input: 210 40% 96%;
     --ring: 258 89% 65%;
 
     /* Gradients */
-    --gradient-primary: linear-gradient(
-      135deg,
-      hsl(255 92% 76%) 0%,
-      hsl(263 69% 50%) 100%
-    );
-    --gradient-background: linear-gradient(
-      135deg,
-      hsl(240 10% 98%) 0%,
-      hsl(245 15% 96%) 100%
-    );
-    --gradient-card: linear-gradient(
-      135deg,
-      hsl(0 0% 100%) 0%,
-      hsl(240 10% 99%) 100%
-    );
+    --gradient-primary: linear-gradient(135deg,
+        hsl(255 92% 76%) 0%,
+        hsl(263 69% 50%) 100%);
+    --gradient-background: linear-gradient(135deg,
+        hsl(240 10% 98%) 0%,
+        hsl(245 15% 96%) 100%);
+    --gradient-card: linear-gradient(135deg,
+        hsl(0 0% 100%) 0%,
+        hsl(240 10% 99%) 100%);
 
     /* Shadows */
     --shadow-sm: 0 1px 2px 0 hsl(218 36% 18% / 0.05);
@@ -141,46 +159,4 @@
   body {
     @apply bg-background text-foreground;
   }
-}
-
-/* CSS Reset */
-*,
-*::before,
-*::after {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-html, body {
-  height: 100%;
-}
-
-body {
-  line-height: 1.5;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-    Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
-  -webkit-font-smoothing: antialiased;
-}
-
-img, picture, video, canvas, svg {
-  display: block;
-  max-width: 100%;
-}
-
-input, button, textarea, select {
-  font: inherit;
-}
-
-button {
-  cursor: pointer;
-}
-
-a {
-  text-decoration: none;
-  color: inherit;
-}
-
-ul, ol {
-  list-style: none;
 }

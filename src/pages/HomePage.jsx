@@ -1,8 +1,8 @@
-import React from 'react'
+import React, {  } from 'react'
 
-function HomePage() {
+function HomePage({user}) {
   return (
-    <div className='text-3xl font-bold'>HomePage</div>
+    <div className='text-3xl font-bold'>Hello {user?.displayName || 'Guest'}!</div>
   )
 }
 
