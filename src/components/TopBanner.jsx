@@ -16,7 +16,7 @@ export const TopBanner = () => {
     return () => clearInterval(timer);
   }, []);
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 py-8">
+    <div className="grid grid-cols-1 lg:grid-cols-4 gap-2 py-8">
       {/* LEFT BIG BANNER */}
       <div className="lg:col-span-2 row-span-2 relative rounded-xl overflow-hidden bg-[#f3e3d8] p-8 flex items-center">
         {/* TEXT */}
