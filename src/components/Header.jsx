@@ -179,19 +179,13 @@ const Header = ({ user }) => {
                 </NavLink>
                 <NavLink
                   className="text-white uppercase text-[16px] tracking-wide"
-                  to="/"
+                  to="/store"
                 >
                   our store
                 </NavLink>
                 <NavLink
                   className="text-white uppercase text-[16px] tracking-wide"
-                  to="/"
-                >
-                  blogs
-                </NavLink>
-                <NavLink
-                  className="text-white uppercase text-[16px] tracking-wide"
-                  to="/"
+                  to="/contact"
                 >
                   contact
                 </NavLink>

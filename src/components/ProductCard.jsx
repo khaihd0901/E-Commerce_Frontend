@@ -4,7 +4,7 @@ const ProductCard = ({product}) => {
   return (
     <>
       {/* {products.map((pro) => ( */}
-        <div className="product-card bg-white rounded-xl shadow-sm p-4 relative hover:shadow-md overflow-hidden transition">
+        <div className="product-card bg-white rounded-xl shadow-sm p-4 relative hover:shadow-md overflow-hidden transition cursor-pointer">
           {/* Wishlist icon */}
           <button className="absolute top-3 right-3 text-gray-400 hover:text-red-500 transition">
             <i class="fa-solid fa-heart"></i>

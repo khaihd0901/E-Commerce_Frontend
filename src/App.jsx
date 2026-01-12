@@ -1,11 +1,14 @@
 import { BrowserRouter, Route, Routes } from "react-router";
-import SigninPage from "./pages/SigninPage";
-import SignupPage from "./pages/SignupPage";
 import { Toaster } from "sonner";
-import HomePage from "./pages/HomePage";
-import Layout from "./components/Layout.jsx";
 import { useEffect, useState } from "react";
 import { getUser } from "./services/authService";
+import HomePage from "./pages/HomePage";
+import Layout from "./components/Layout.jsx";
+import SigninPage from "./pages/SigninPage";
+import SignupPage from "./pages/SignupPage";
+import OurShop from "./pages/OurShop";
+import Contact from "./pages/Contact";
+
 
 function App() {
   const [user, setUser] = useState(null);
@@ -34,6 +37,8 @@ function App() {
             <Route index element={<HomePage user={user} />} />
             <Route path="/signin" element={<SigninPage setUser={setUser} />} />
             <Route path="/signup" element={<SignupPage />} />
+            <Route path="/store" element={<OurShop />} />
+            <Route path="/contact" element={<Contact/>}/>
           </Route>
         </Routes>
       </BrowserRouter>

@@ -29,7 +29,7 @@ function SigninPage({setUser}) {
     }
   }
   return (
-    <div className="flex flex-col justify-center items-center w-[50%] font-mono">
+    <div className="flex flex-col justify-center items-center w-[50%]">
       <div className="h2 pt-10 pb-10 text-2xl  w-full text-center">
         Sign In Page
       </div>
