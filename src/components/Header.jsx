@@ -42,15 +42,14 @@ const Header = ({ user }) => {
             </Button>
           </div>
           <div className="flex justify-around items-center gap-4">
-            <Link className="flex items-center text-white capitalize  ">
-              <i className="fa-solid fa-rotate mr-1"></i>
-              <p>compare</p>
-            </Link>
-            <Link className="flex items-center text-white capitalize">
+            <Link to='wish-list'
+             className="flex items-center text-white capitalize gap-1">
               <i className="fa-solid fa-heart mr-1"></i>
-              <p>whish list</p>
+              <p>wish list</p>
             </Link>
-            <Link className="flex items-center text-white capitalize relative mr-10">
+            <Link
+            to='/cart'
+             className="flex items-center text-white capitalize relative mr-10">
               <i className="fa-solid  fa-basket-shopping text-2xl mr-1 text-[var(--color-febd69)]"></i>
               <span className="bg-red-400 w-5 text-[12px] text-black ms-1 rounded-full absolute top-[-4px] left-4 text-center">
                 1
@@ -60,8 +59,8 @@ const Header = ({ user }) => {
               <div className="flex items-center text-white capitalize">
                 <div className="relative group">
                   <div className="flex items-center text-white capitalize cursor-pointer gap-1">
+                    <span>{user?.username || "account"}</span>
                     <i className="fa-solid fa-user"></i>
-                    <span>{user?.displayName || "account"}</span>
                   </div>
 
                   <div
@@ -70,6 +69,7 @@ const Header = ({ user }) => {
                transition-all duration-200 z-50"
                   >
                     <ul className="py-2 text-sm text-gray-700">
+                      <li></li>
                       <li>
                         <NavLink
                           to="/profile"
@@ -105,7 +105,10 @@ const Header = ({ user }) => {
                 </div>
               </div>
             ) : (
-              <Link to={'/signin'} className="flex items-center text-white capitalize">
+              <Link
+                to={"login"}
+                className="flex items-center text-white capitalize"
+              >
                 <i className="fa-solid fa-arrow-right-to-bracket mr-1"></i>
                 <p>login</p>
               </Link>
@@ -120,7 +123,7 @@ const Header = ({ user }) => {
               <div className="relative group">
                 <button className="flex items-center gap-2 text-white uppercase text-[16px] tracking-wide  cursor-pointer">
                   <i className="fa-solid fa-bars text-[var(--color-febd69)]"></i>
-                 product categories
+                  product categories
                 </button>
                 <div
                   className="absolute top-full left-0 mt-2 w-56 bg-white shadow-lg opacity-0 invisible 
@@ -179,7 +182,7 @@ const Header = ({ user }) => {
                 </NavLink>
                 <NavLink
                   className="text-white uppercase text-[16px] tracking-wide"
-                  to="/store"
+                  to="/products"
                 >
                   our store
                 </NavLink>

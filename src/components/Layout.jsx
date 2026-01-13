@@ -5,7 +5,7 @@ import { Outlet } from "react-router";
 
 const Layout = ({ user }) => {
   return (
-    <div className="min-h-screen overflow-x-hidden">
+    <div className="min-h-screen overflow-x-hidden bg-gray-100">
       <Header user={user} />
 
       <main className="mx-auto container">

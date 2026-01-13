@@ -13,6 +13,8 @@ export const products = [
       "../../public/images/cat-laptop.png",
       "../../public/images/cat-laptop.png",
       "../../public/images/cat-laptop.png",
+      "../../public/images/cat-laptop.png", 
+      "../../public/images/cat-laptop.png",
     ],
   },
   {
@@ -27,6 +29,7 @@ export const products = [
       "../../public/images/cat-camera.png",
       "../../public/images/cat-camera.png",
       "../../public/images/cat-camera.png",
+      "../../public/images/cat-laptop.png", 
     ],
   },
   {

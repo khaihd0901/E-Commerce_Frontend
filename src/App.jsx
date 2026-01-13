@@ -4,10 +4,14 @@ import { useEffect, useState } from "react";
 import { getUser } from "./services/authService";
 import HomePage from "./pages/HomePage";
 import Layout from "./components/Layout.jsx";
-import SigninPage from "./pages/SigninPage";
-import SignupPage from "./pages/SignupPage";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 import OurShop from "./pages/OurShop";
 import Contact from "./pages/Contact";
+import ForgotPassword from "./pages/ForgotPassword";
+import ProductDetail from "./pages/ProductDetail";
+import ShoppingCart from "./pages/ShoppingCart";
+import WishList from "./pages/WishList";
 
 
 function App() {
@@ -35,11 +39,15 @@ function App() {
         <Routes>
           <Route path="/" element={<Layout user={user} />}>
             <Route index element={<HomePage user={user} />} />
-            <Route path="/signin" element={<SigninPage setUser={setUser} />} />
-            <Route path="/signup" element={<SignupPage />} />
-            <Route path="/store" element={<OurShop />} />
+            <Route path="/login" element={<Login setUser={setUser} />} />
+            <Route path="/register" element={<Register />} />
             <Route path="/contact" element={<Contact/>}/>
-          </Route>
+            <Route path="/forgot-password" element={<ForgotPassword/>} />
+            <Route path="/products" element={<OurShop />} />
+            <Route path="/product/:id" element={<ProductDetail/>}/>
+            <Route path='/cart' element={<ShoppingCart/>}/>
+            <Route path='/wish-list' element={<WishList/>}/>
+          </Route> 
         </Routes>
       </BrowserRouter>
     </>
