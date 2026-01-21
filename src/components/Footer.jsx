@@ -1,6 +1,5 @@
 import React from "react";
-import { Input } from "./ui/input";
-import { Button } from "./ui/button";
+
 
 const Footer = () => {
   return (
@@ -16,13 +15,13 @@ const Footer = () => {
               </div>
             </div>
             <div className="flex row-span-4">
-              <Input
+              <input
                 className="bg-white w-full"
                 placeholder="Enter your email"
-              ></Input>
-              <Button className="search-btn text-white capitalize cursor-pointer hover:text-black">
+              ></input>
+              <button className="search-btn text-white capitalize cursor-pointer hover:text-black">
                 subscribe
-              </Button>
+              </button>
             </div>
           </div>   
         </div>

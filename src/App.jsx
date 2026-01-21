@@ -1,7 +1,5 @@
 import { BrowserRouter, Route, Routes } from "react-router";
 import { Toaster } from "sonner";
-import { useEffect, useState } from "react";
-import { getUser } from "./services/authService";
 import HomePage from "./pages/HomePage";
 import Layout from "./components/Layout.jsx";
 import Login from "./pages/Login";
@@ -12,42 +10,34 @@ import ForgotPassword from "./pages/ForgotPassword";
 import ProductDetail from "./pages/ProductDetail";
 import ShoppingCart from "./pages/ShoppingCart";
 import WishList from "./pages/WishList";
-
+import Profile from "./pages/Profile";
+import CheckOut from "./pages/CheckOut";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
-  const [user, setUser] = useState(null);
-  useEffect(() => {
-      const token = localStorage.getItem("token");
-      const fetchUser = async () => {
-        if (token) {
-          try {
-            const userData = await getUser(token);
-            setUser(userData);
-          } catch (error) {
-            console.error("Failed to fetch user:", error);
-            localStorage.removeItem("token");
-          }
-        }
-      };
-      fetchUser();
-  }, []);
-  console.log(user);
+
   return (
     <>
       <Toaster richColors />
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Layout user={user} />}>
-            <Route index element={<HomePage user={user} />} />
-            <Route path="/login" element={<Login setUser={setUser} />} />
+          <Route path="/" element={<Layout />}>
+            <Route index element={<HomePage />} />
+            <Route path="/login" element={<Login/>} />
             <Route path="/register" element={<Register />} />
-            <Route path="/contact" element={<Contact/>}/>
-            <Route path="/forgot-password" element={<ForgotPassword/>} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/products" element={<OurShop />} />
-            <Route path="/product/:id" element={<ProductDetail/>}/>
-            <Route path='/cart' element={<ShoppingCart/>}/>
-            <Route path='/wish-list' element={<WishList/>}/>
-          </Route> 
+            <Route path="/product/:id" element={<ProductDetail />} />
+
+            {/* private route */}
+            <Route element={<ProtectedRoute/>}>
+            <Route path="/me" element={<Profile />} />
+            <Route path="/cart" element={<ShoppingCart />} />
+            <Route path="/wish-list" element={<WishList />} />
+            <Route path="/check-out" element={<CheckOut />} />
+            </Route>
+          </Route>
         </Routes>
       </BrowserRouter>
     </>

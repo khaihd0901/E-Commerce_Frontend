@@ -1,15 +1,14 @@
-import { signOut } from "@/services/authService";
+import { useAuthStore } from "@/stores/authStore";
 import { Link, NavLink } from "react-router";
-import { useNavigate } from "react-router";
-import { Input } from "./ui/input";
-import { Button } from "./ui/button";
 const Header = ({ user }) => {
-  const navigate = useNavigate();
+  const { authSignOut } = useAuthStore();
+
   const handleLogout = async () => {
-    await signOut();
-    localStorage.removeItem("token");
-    window.location.reload();
-    navigate("/");
+    try {
+      await authSignOut();
+    } catch (err) {
+      console.log(err);
+    }
   };
   return (
     <>
@@ -32,24 +31,27 @@ const Header = ({ user }) => {
             <h2 className="text-2xl font-bold text-white uppercase">simp1e.</h2>
           </NavLink>
           <div className="flex">
-            <Input
+            <input
               type="text"
               placeholder="Search products..."
               className="ml-4 w-100 bg-white"
             />
-            <Button className="search-btn cursor-pointer hover:text-black">
+            <button className="search-btn cursor-pointer hover:text-black">
               <i className="fa-solid fa-magnifying-glass "></i>
-            </Button>
+            </button>
           </div>
           <div className="flex justify-around items-center gap-4">
-            <Link to='wish-list'
-             className="flex items-center text-white capitalize gap-1">
+            <Link
+              to="wish-list"
+              className="flex items-center text-white capitalize gap-1"
+            >
               <i className="fa-solid fa-heart mr-1"></i>
               <p>wish list</p>
             </Link>
             <Link
-            to='/cart'
-             className="flex items-center text-white capitalize relative mr-10">
+              to="/cart"
+              className="flex items-center text-white capitalize relative mr-10"
+            >
               <i className="fa-solid  fa-basket-shopping text-2xl mr-1 text-[var(--color-febd69)]"></i>
               <span className="bg-red-400 w-5 text-[12px] text-black ms-1 rounded-full absolute top-[-4px] left-4 text-center">
                 1
@@ -72,7 +74,7 @@ const Header = ({ user }) => {
                       <li></li>
                       <li>
                         <NavLink
-                          to="/profile"
+                          to="/me"
                           className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100"
                         >
                           <i className="fa-solid fa-user"></i>

@@ -1,35 +1,41 @@
 import api from '../lib/axios';
-import { toast } from 'sonner';
 
-export const logIn = async (username, password) => {
-  const res = await api.post('auth/signin', { username, password });
-  toast.success('Welcome back!');
+
+const authSignUp = async (data) => {
+  const res = await api.post(`auth/signup`, data);
+  return res.data
+};
+const authLogin = async (data) => {
+  const res = await api.post(`auth/signin`, data);
   return res.data;
 };
 
-export const getUser = async (token) =>{
-  const res = await api.get('auth/me', {
-    headers: {
-      Authorization: `Bearer ${token}`
-    }
-  });
-  return res.data;
+const authSignOut = async () =>{
+  return await api.post(`auth/signout`);
 }
-
-export const registerUser = async (username,email,password) =>{
-  const res = await api.post('auth/signup',{username,email,password});
-  if(res){
-    toast.success('Register Success')
-  }else{
-    toast.error('Something When Wrong!')
-  }
+const authMe = async () =>{
+  const res = await api.get(`user/me`)
+  return res.data
 }
-
-export const forgotPassword = async () =>{
-  
+const authRefreshToken = async () =>{
+  const res = await api.post(`auth/refresh-token`)
+  return res.data.accessToken
 }
-
-export const signOut = async () => {
-  await api.post('auth/signout');
-  toast.success('Signed out successfully!');
+const authSendOtp = async () =>{
+  const res = await api.post(`auth/send-otp`)
+  return res.data
 }
+const authVerifyOtp = async () =>{
+  const res = await api.post(`auth/verify-otp`)
+  return res.data
+}
+const authService = {
+  authSignUp,
+  authLogin,
+  authSignOut,
+  authMe,
+  authRefreshToken,
+  authSendOtp,
+  authVerifyOtp,
+}
+export default authService

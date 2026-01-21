@@ -122,7 +122,7 @@ const ProductDetail = () => {
               </div>
             </div>
           </div>
-          <i className="fa-solid fa-heart absolute top-4 right-2 text-black cursor-pointer text-2xl"></i>
+          <i className="fa-solid fa-heart absolute top-4 right-2 text-black hover:text-red-600 cursor-pointer text-2xl"></i>
         </div>
       </div>
 

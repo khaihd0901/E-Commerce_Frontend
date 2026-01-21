@@ -1,50 +1,53 @@
-import { logIn } from "@/services/authService";
-import { useState } from "react";
-import { useNavigate, Link } from "react-router";
+import { Link, useNavigate } from "react-router";
+import * as Yup from "yup";
+import { useFormik } from "formik";
+import { useAuthStore } from "@/stores/authStore";
 
-function Login({ setUser }) {
-  const [formData, setFormData] = useState({
-    username: "",
-    password: "",
+function Login() {
+  const navigate = useNavigate()
+  const { authLogin } = useAuthStore();
+  let validationSchema = Yup.object({
+    email: Yup.string()
+      .email("Invalid email address")
+      .required("Email is required"),
+    password: Yup.string().required("Password is required"),
   });
-
-  const navigate = useNavigate();
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const data = await logIn(formData.username, formData.password);
-      console.log(data);
-      localStorage.setItem("token", data.accessToken);
-      setUser(data.user);
-      navigate("/");
-      window.location.reload();
-    } catch (error) {
-      localStorage.removeItem("token");
-      console.error("Signin failed:", error);
-    }
-  };
+  const formik = useFormik({
+    initialValues: {
+      email: "",
+      password: "",
+    },
+    validationSchema: validationSchema,
+    onSubmit: async (email,password) => {
+      await authLogin(email,password);
+      navigate('/')
+    },
+  });
   return (
     <div className="container mx-auto flex flex-col justify-center items-center py-8 mt-10">
-      <form className="flex flex-col w-lg py-10 px-20 bg-white rounded-xl shadow">
+      <form
+        onSubmit={formik.handleSubmit}
+        className="flex flex-col w-lg py-10 px-20 bg-white rounded-xl shadow"
+      >
         <div className="text-2xl  w-full text-center px-8 py-4">Login</div>
         <div className="flex flex-col ">
-          <label htmlFor="username" className="mb-2 text-[16px]">
-            Username
+          <label htmlFor="email" className="mb-2 text-[16px]">
+            Email
           </label>
           <input
-            name="username"
-            type="username"
-            placeholder="Username"
-            className="border border-gray-400 p-2 mb-4 text-sm focus:outline-none resize-none"
-            value={formData.username}
-            onChange={handleChange}
-            required
+            name="email"
+            type="email"
+            placeholder="email"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.email}
+            className="border border-gray-400 p-2 mb-4 text-sm"
             autoCapitalize="off"
           />
         </div>
+        {formik.touched.email && formik.errors.email ? (
+          <div className="text-red-500 text-sm">{formik.errors.email}</div>
+        ) : null}
         <div className="flex flex-col capitalize">
           <label htmlFor="Password" className="mb-2 text-[16px]">
             password
@@ -52,13 +55,16 @@ function Login({ setUser }) {
           <input
             name="password"
             type="password"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.password}
             placeholder="Password"
-            className="border border-gray-400 p-2 mb-4 text-sm focus:outline-none resize-none"
-            value={formData.password}
-            onChange={handleChange}
-            required
+            className="border border-gray-400 p-2 mb-4 text-sm"
           />
         </div>
+        {formik.touched.password && formik.errors.password ? (
+          <div className="text-red-500 text-sm">{formik.errors.password}</div>
+        ) : null}
         <div className="flex justify-between items-center mb-4">
           <div className="remember_me flex items-center">
             <input type="checkbox" className="mr-1 cursor-pointer" />
@@ -76,7 +82,7 @@ function Login({ setUser }) {
           </div>
         </div>
         <button
-          onClick={handleSubmit}
+          type="submit"
           className="bg-[var(--color-febd69)] text-black p-2 hover:bg-[var(--color-fdaa3d)] hover:text-black cursor-pointer border border-gray-400 transition-smooth"
         >
           Sign In
