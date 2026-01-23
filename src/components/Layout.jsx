@@ -19,8 +19,6 @@ const Layout = () => {
   useEffect(() => {
     init();
   }, []);
-
-  console.log(user);
   return (
     <div className="min-h-screen overflow-x-hidden bg-gray-100">
       <Header user={user} />

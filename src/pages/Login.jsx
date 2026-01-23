@@ -4,7 +4,7 @@ import { useFormik } from "formik";
 import { useAuthStore } from "@/stores/authStore";
 
 function Login() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const { authLogin } = useAuthStore();
   let validationSchema = Yup.object({
     email: Yup.string()
@@ -16,11 +16,12 @@ function Login() {
     initialValues: {
       email: "",
       password: "",
+      rememberMe: false,
     },
     validationSchema: validationSchema,
-    onSubmit: async (email,password) => {
-      await authLogin(email,password);
-      navigate('/')
+    onSubmit: async (email, password) => {
+      await authLogin(email, password);
+      navigate("/");
     },
   });
   return (
@@ -66,9 +67,16 @@ function Login() {
           <div className="text-red-500 text-sm">{formik.errors.password}</div>
         ) : null}
         <div className="flex justify-between items-center mb-4">
-          <div className="remember_me flex items-center">
-            <input type="checkbox" className="mr-1 cursor-pointer" />
-            <label htmlFor="remember me" className="text-[16px]  ">
+          <div className="remember_me flex items-center cursor-pointer">
+            <input
+              id='rememberMe'
+              name="rememberMe"
+              checked={formik.values.rememberMe}
+              onChange={formik.handleChange}
+              type="checkbox"
+              className="mr-1 cursor-pointer"
+            />
+            <label htmlFor="rememberMe" className="text-[16px] cursor-pointer select-none">
               remember me
             </label>
           </div>

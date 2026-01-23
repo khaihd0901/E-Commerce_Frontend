@@ -9,10 +9,10 @@ export const useAuthStore = create((set, get) => ({
   isSuccess: false,
   isError: false,
 
-  setAccessToken: (token) =>{
+  setAccessToken: (token) => {
     set({
-      accessToken: token
-    })
+      accessToken: token,
+    });
   },
   clearState: () => {
     set({
@@ -27,7 +27,6 @@ export const useAuthStore = create((set, get) => ({
     try {
       set({
         isLoading: true,
-        isSuccess: false,
         isError: false,
       });
       await authService.authSignUp(data);
@@ -42,8 +41,6 @@ export const useAuthStore = create((set, get) => ({
     } finally {
       set({
         isLoading: false,
-        isError: false,
-        isSuccess: false,
       });
     }
   },
@@ -55,8 +52,10 @@ export const useAuthStore = create((set, get) => ({
         isError: false,
       });
       const user = await authService.authLogin(data);
-      get().setAccessToken(user.accessToken)
-      await get().authMe();
+      if (user) {
+        get().setAccessToken(user.accessToken);
+        await get().authMe();
+      }
       toast.success("Sign In Success! You Will Be Redirect To Home Page");
     } catch (err) {
       set({
@@ -64,13 +63,11 @@ export const useAuthStore = create((set, get) => ({
         isSuccess: false,
         isError: true,
       });
-      console.log(err);
-      toast.error("Sign Up Failed !!!");
+      console.log(err.response);
+      toast.error(err.response.data.message);
     } finally {
       set({
         isLoading: false,
-        isError: false,
-        isSuccess: false,
       });
     }
   },
@@ -102,49 +99,55 @@ export const useAuthStore = create((set, get) => ({
     } finally {
       set({
         isLoading: false,
-        isError: false,
-        isSuccess: false,
       });
     }
   },
-  authRefreshToken: async () =>{
-    try{
-      set({isLoading: true})
-      const {user, authMe, setAccessToken} = get(); 
+  authRefreshToken: async () => {
+    try {
+      set({ isLoading: true });
+      const { user, authMe, setAccessToken } = get();
       const accessToken = await authService.authRefreshToken();
-      setAccessToken(accessToken)
-      if(!user){
-        await authMe()
+      setAccessToken(accessToken);
+      if (!user) {
+        await authMe();
       }
-    }catch (err) {
-      console.log(err)
-      toast.error("Your login session has expired, please log in again. ")
-      get().clearState()
+    } catch (err) {
+      console.log(err);
+      toast.error("Your login session has expired, please log in again. ");
+      get().clearState();
     } finally {
       set({
         isLoading: false,
-        isError: false,
-        isSuccess: false,
       });
     }
   },
-  authSendOtp: async () =>{
-    try{
-      set({isLoading: true})
-      const {user} = get();
-      const email = user.email
-      console.log(email)
-      await authService.authSendOtp(email)
-      toast.success("Your OTP has sent")
-    }catch(err){
-      console.log(err)
-      toast.error("Something went wrong while sending otp")
-    }finally{
+  authSendOtp: async () => {
+    try {
+      set({ isLoading: true });
+      const { user } = get();
+      const email = user.email;
+      await authService.authSendOtp(email);
+      toast.success("Your OTP has sent");
+    } catch (err) {
+      console.log(err);
+      toast.error("Something went wrong while sending otp");
+    } finally {
       set({
         isLoading: false,
-        isError: false,
-        isSuccess: false
-      })
+      });
     }
-  }
+  },
+  authVerifyEmail: async (token) => {
+    try {
+      set({ isLoading: true });
+      await authService.authVerifyEmail(token);
+      toast.success("Your account have been verified");
+    } catch (err) {
+      console.log(err);
+    } finally {
+      set({
+        isLoading: false,
+      });
+    }
+  },
 }));

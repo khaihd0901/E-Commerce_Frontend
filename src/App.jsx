@@ -13,6 +13,7 @@ import WishList from "./pages/WishList";
 import Profile from "./pages/Profile";
 import CheckOut from "./pages/CheckOut";
 import ProtectedRoute from "./components/ProtectedRoute";
+import VerifyEmail from "./pages/VerifyEmail";
 
 function App() {
 
@@ -21,6 +22,7 @@ function App() {
       <Toaster richColors />
       <BrowserRouter>
         <Routes>
+          <Route path ="/verify-email/:token" element={<VerifyEmail/>} />
           <Route path="/" element={<Layout />}>
             <Route index element={<HomePage />} />
             <Route path="/login" element={<Login/>} />

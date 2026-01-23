@@ -29,6 +29,11 @@ const authVerifyOtp = async () =>{
   const res = await api.post(`auth/verify-otp`)
   return res.data
 }
+const authVerifyEmail = async (token) =>{
+  const res = await api.post(`auth/verify-email/${token}`)
+  return res.data
+}
+
 const authService = {
   authSignUp,
   authLogin,
@@ -37,5 +42,6 @@ const authService = {
   authRefreshToken,
   authSendOtp,
   authVerifyOtp,
+  authVerifyEmail,
 }
 export default authService

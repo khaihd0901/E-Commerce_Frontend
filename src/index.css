@@ -26,6 +26,9 @@
   button{
     cursor: pointer;
   }
+  body{
+      user-select: none;
+  }
   .header-top-strip {
     background-color: var(--color-131921);
     border-bottom: 1px solid var(--color-3b4149);

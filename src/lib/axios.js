@@ -21,7 +21,7 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use((res) => res, async(error) =>{
   const originalRequest = error.config;
 
-  if(originalRequest.url.includes('auth/login') || originalRequest.url.includes('auth/signup') || originalRequest.url.includes('auth/refresh-token') ){
+  if(originalRequest.url.includes('/auth/login') || originalRequest.url.includes('/auth/signup') || originalRequest.url.includes('/auth/refresh-token') ){
     return Promise.reject(error)
   }
 
