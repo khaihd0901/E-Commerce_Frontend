@@ -1,11 +1,21 @@
 import { BreadCrumb } from "@/components/BreadCrumb";
-import React, { useState } from "react";
-import { products } from "@/lib/testData";
+import React, { useEffect, useState } from "react";
 import ReviewModal from "@/components/ReviewModel";
 import PopularProduct from "@/components/PopularProduct";
+import { useParams } from "react-router";
+import { useProductStore } from "@/stores/productStore";
 const ProductDetail = () => {
-  const prod = products[1];
   const [open, setOpen] = useState(false);
+  const prodId = useParams();
+  const { productGetById } = useProductStore();
+  const product = useProductStore((s) => s.product);
+  useEffect(() => {
+    productGetById(prodId.id);
+  }, [prodId.id]);
+
+  useEffect(() => {
+    console.log("product updated:", product);
+  }, [product]);
   return (
     <>
       {/* <BreadCrumb title={prod.title}/> */}
@@ -15,14 +25,18 @@ const ProductDetail = () => {
         <div className="grid grid-cols-2 mt-8 rounded-xl shadow bg-white relative">
           <div className="grid grid-cols-2 px-4 py-4 gap-4">
             <div className="col-span-2">
-              <img src={prod.image} alt="" className="border border-gray-200" />
+              <img
+                src={product?.images[0].url}
+                alt=""
+                className="border border-gray-200"
+              />
             </div>
             <div className="col-span-2 grid grid-cols-2 gap-4">
-              {prod.thumbs.map((img, index) => (
+              {product?.images.map((img, index) => (
                 <div className="">
                   <img
                     key={index}
-                    src={img}
+                    src={img.url}
                     alt="product"
                     className="border border-gray-200 col-span-1"
                   />
@@ -216,7 +230,7 @@ const ProductDetail = () => {
       </div>
 
       {/* Populate Product */}
-      <PopularProduct />
+      {/* <PopularProduct /> */}
     </>
   );
 };

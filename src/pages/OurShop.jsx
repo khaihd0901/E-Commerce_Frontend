@@ -1,11 +1,20 @@
 import { BreadCrumb } from "@/components/BreadCrumb";
 import FilterSidebar from "@/components/FilterSidebar";
 import ProductCard from "@/components/ProductCard";
-import { products } from "@/lib/testData";
-import React, { useState } from "react";
+import { useProductStore } from "@/stores/productStore";
+import React, { useEffect, useState } from "react";
 
 const OurShop = () => {
   const [value, setValue] = useState("default");
+  const products = useProductStore((state) => state.products);
+  const productGetAll = useProductStore((state) => state.productGetAll);
+  const isLoading = useProductStore((state) => state.isLoading);
+  useEffect(() => {
+    productGetAll();
+  }, [productGetAll]);
+  console.log("products", products)
+
+  if (isLoading) return <p>Loading...</p>;
   return (
     <>
       <BreadCrumb title="Our Store" />
@@ -30,13 +39,13 @@ const OurShop = () => {
                 </select>
               </div>
               <div className="flex items-center gap-2">
-                <p className="text-[14px]">{products.length} products</p>
+                <p className="text-[14px]">{products?.length} products</p>
               </div>
             </div>
           </div>
           {/* List Products */}
           <div className="col-span-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 row-span-10 gap-4">
-            {products.map((product) => (
+            {products?.map((product) => (
                 <ProductCard product={product} key={product._id} />
             ))}
           </div>

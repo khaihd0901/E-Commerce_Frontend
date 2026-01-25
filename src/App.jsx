@@ -14,6 +14,7 @@ import Profile from "./pages/Profile";
 import CheckOut from "./pages/CheckOut";
 import ProtectedRoute from "./components/ProtectedRoute";
 import VerifyEmail from "./pages/VerifyEmail";
+import OrderHistory from "./pages/OrderHistory/OrderHistory";
 
 function App() {
 
@@ -38,6 +39,7 @@ function App() {
             <Route path="/cart" element={<ShoppingCart />} />
             <Route path="/wish-list" element={<WishList />} />
             <Route path="/check-out" element={<CheckOut />} />
+            <Route path="/order-history" element={<OrderHistory />} />
             </Route>
           </Route>
         </Routes>

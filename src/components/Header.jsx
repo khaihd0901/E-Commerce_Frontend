@@ -1,7 +1,44 @@
 import { useAuthStore } from "@/stores/authStore";
-import { Link, NavLink } from "react-router";
-const Header = ({ user }) => {
-  const { authSignOut } = useAuthStore();
+import { useEffect, useRef, useState } from "react";
+import { Link, NavLink, useNavigate } from "react-router";
+import {
+  BarChart,
+  Heart,
+  LogInIcon,
+  LogOut,
+  Menu,
+  Search,
+  Settings,
+  ShoppingBag,
+  ShoppingBasket,
+  User,
+} from "lucide-react";
+const Header = () => {
+  const [query, setQuery] = useState("");
+  const [suggestions, setSuggestions] = useState([]);
+  const [showPopup, setShowPopup] = useState(false);
+  const popupRef = useRef(null);
+  const navigate = useNavigate();
+  const MOCK_PRODUCTS = [
+    { id: 1, name: "iPhone 15 Pro" },
+    { id: 2, name: "Samsung Galaxy S24" },
+    { id: 3, name: "MacBook Pro M3" },
+    { id: 4, name: "AirPods Pro" },
+  ];
+  const { accessToken, user, authRefreshToken, authMe, authSignOut } =
+    useAuthStore();
+  const init = async () => {
+    if (!accessToken) {
+      await authRefreshToken();
+    }
+    if (accessToken && !user) {
+      await authMe();
+    }
+  };
+
+  useEffect(() => {
+    init();
+  }, []);
 
   const handleLogout = async () => {
     try {
@@ -10,6 +47,33 @@ const Header = ({ user }) => {
       console.log(err);
     }
   };
+  const handleSearchChange = (e) => {
+    const value = e.target.value;
+    setQuery(value);
+
+    if (!value.trim()) {
+      setSuggestions([]);
+      setShowPopup(false);
+      return;
+    }
+
+    const filtered = MOCK_PRODUCTS.filter((item) =>
+      item.name.toLowerCase().includes(value.toLowerCase()),
+    );
+
+    setSuggestions(filtered);
+    setShowPopup(true);
+  };
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (popupRef.current && !popupRef.current.contains(e.target)) {
+        setShowPopup(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
   return (
     <>
       <header className="header-top-strip py-4">
@@ -18,10 +82,9 @@ const Header = ({ user }) => {
             free shipping over $100 & free return
           </div>
           <div className="flex gap-4">
-            <p className="text-end text-white mb-0 border-r border-white pr-4">
+            <p className="text-end text-white">
               Hotline: <a href="tel:+123456789">+123 456 789</a>
             </p>
-            <div className="text-white capitalize">english</div>
           </div>
         </div>
       </header>
@@ -30,29 +93,56 @@ const Header = ({ user }) => {
           <NavLink to="/">
             <h2 className="text-2xl font-bold text-white uppercase">simp1e.</h2>
           </NavLink>
-          <div className="flex">
+          <div className="flex relative">
             <input
+              ref={popupRef}
+              onChange={handleSearchChange}
               type="text"
               placeholder="Search products..."
-              className="ml-4 w-100 bg-white"
+              className="w-100 bg-white p-2 focus:ring-0 outline-0 rounded-l-md"
             />
-            <button className="search-btn cursor-pointer hover:text-black">
-              <i className="fa-solid fa-magnifying-glass "></i>
+            <button className="search-btn cursor-pointer hover:text-black p-2 rounded-r-md">
+              <Search className="" />
             </button>
+            {showPopup && suggestions.length > 0 && (
+              <div className="absolute top-full left-0 w-full bg-white shadow-lg rounded-md mt-1 z-50 px-2 py-4">
+                <ul>
+                  {suggestions.map((item) => (
+                    <li
+                      key={item.id}
+                      onClick={() => {
+                        navigate(`/products/${item.id}`);
+                        setShowPopup(false);
+                        setQuery("");
+                      }}
+                      className="px-4 py-2 cursor-pointer hover:bg-gray-200 text-sm rounded-md"
+                    >
+                      {item.name}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {showPopup && suggestions.length === 0 && (
+              <div className="absolute top-full left-0 w-full bg-white shadow-lg rounded-md mt-1 p-3 text-sm text-gray-500">
+                No products found
+              </div>
+            )}
           </div>
           <div className="flex justify-around items-center gap-4">
             <Link
               to="wish-list"
               className="flex items-center text-white capitalize gap-1"
             >
-              <i className="fa-solid fa-heart mr-1"></i>
+              <Heart />
               <p>wish list</p>
             </Link>
             <Link
               to="/cart"
-              className="flex items-center text-white capitalize relative mr-10"
+              className="flex items-center text-white capitalize relative mr-4"
             >
-              <i className="fa-solid  fa-basket-shopping text-2xl mr-1 text-[var(--color-febd69)]"></i>
+              <ShoppingBasket />
               <span className="bg-red-400 w-5 text-[12px] text-black ms-1 rounded-full absolute top-[-4px] left-4 text-center">
                 1
               </span>
@@ -61,8 +151,7 @@ const Header = ({ user }) => {
               <div className="flex items-center text-white capitalize">
                 <div className="relative group">
                   <div className="flex items-center text-white capitalize cursor-pointer gap-1">
-                    <span>{user?.username || "account"}</span>
-                    <i className="fa-solid fa-user"></i>
+                    <User />
                   </div>
 
                   <div
@@ -77,8 +166,17 @@ const Header = ({ user }) => {
                           to="/me"
                           className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100"
                         >
-                          <i className="fa-solid fa-user"></i>
+                          <User />
                           Profile
+                        </NavLink>
+                      </li>
+                      <li>
+                        <NavLink
+                          to="/order-history"
+                          className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100"
+                        >
+                          <ShoppingBag />
+                          Orders
                         </NavLink>
                       </li>
                       <li>
@@ -86,7 +184,7 @@ const Header = ({ user }) => {
                           to="/settings"
                           className="flex items-center gap-2 px-4 py-2 hover:bg-gray-100"
                         >
-                          <i className="fa-solid fa-gear"></i>
+                          <Settings />
                           Settings
                         </NavLink>
                       </li>
@@ -98,7 +196,7 @@ const Header = ({ user }) => {
                           onClick={handleLogout}
                           className="w-full text-left flex items-center gap-2 px-4 py-2 text-red-600 hover:bg-gray-100"
                         >
-                          <i className="fa-solid fa-right-from-bracket"></i>
+                          <LogOut />
                           Logout
                         </button>
                       </li>
@@ -111,8 +209,7 @@ const Header = ({ user }) => {
                 to={"login"}
                 className="flex items-center text-white capitalize"
               >
-                <i className="fa-solid fa-arrow-right-to-bracket mr-1"></i>
-                <p>login</p>
+                <LogInIcon />
               </Link>
             )}
           </div>
@@ -124,7 +221,7 @@ const Header = ({ user }) => {
             <div className="flex items-center gap-22">
               <div className="relative group">
                 <button className="flex items-center gap-2 text-white uppercase text-[16px] tracking-wide  cursor-pointer">
-                  <i className="fa-solid fa-bars text-[var(--color-febd69)]"></i>
+                  <Menu />
                   product categories
                 </button>
                 <div

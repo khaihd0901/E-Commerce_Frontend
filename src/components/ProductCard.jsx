@@ -11,22 +11,21 @@ const ProductCard = ({ product }) => {
         </button>
         {/* Product image */}
 
-        <Link to={`/product/${product.id}`}>
+        <Link to={`/product/${product._id}`}>
           <div className="flex justify-center mb-4">
             <img
-              src={product.image}
+              src={product.images[0].url}
               alt={product.title}
               className="h-40 object-contain"
             />
           </div>
           {/* Product info */}
           <div className="space-y-1">
-            <p className="text-sm text-orange-600 font-semibold">
-              {product.brand}
-            </p>
-
-            <h3 className="text-sm font-medium leading-snug line-clamp-2">
+            <p className=" text-sm text-orange-600 font-semibold">
               {product.title}
+            </p>
+            <h3 className="text-sm font-medium leading-snug line-clamp-2">
+              {product.brand.name}
             </h3>
             {/* Rating */}
             <div className="flex text-yellow-400 text-sm">

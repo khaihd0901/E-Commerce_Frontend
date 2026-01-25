@@ -80,4 +80,19 @@ export const useUserStore = create((set, get) => ({
       set({ isLoading: false });
     }
   },
+  userUpdate: async (id,data) =>{
+    try{
+      set({isLoading: true})
+      await userService.userUpdate(id,data)
+      set({isSuccess: true})
+    }catch(err){
+      console.log(err)
+      set({
+        isError: true,
+        isSuccess: false
+      })
+    }finally{
+      set({isLoading: false})
+    }
+  }
 }));

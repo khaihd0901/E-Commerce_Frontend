@@ -1,5 +1,5 @@
 import React from "react";
-
+import {} from 'lucide-react'
 
 const Footer = () => {
   return (
@@ -16,10 +16,11 @@ const Footer = () => {
             </div>
             <div className="flex row-span-4">
               <input
-                className="bg-white w-full"
+                className="bg-white w-full p-2 outline-0 text-gray-800"
+                type="email"
                 placeholder="Enter your email"
               ></input>
-              <button className="search-btn text-white capitalize cursor-pointer hover:text-black">
+              <button className="search-btn text-gray-800 capitalize cursor-pointer hover:text-gray-600 p-2">
                 subscribe
               </button>
             </div>

@@ -19,7 +19,6 @@ const ForgotPassword = () => {
       await userForgotPassword(email);
     },
   });
-  console.log(isLoading)
   return (
     <div className="py-8 container mx-auto flex justify-center items-center mt-10">
       <form
