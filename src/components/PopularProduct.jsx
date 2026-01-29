@@ -1,14 +1,13 @@
 import { useState, useEffect, useRef } from "react";
-import {products} from "../lib/testData";
 import ProductCard from "./ProductCard";
+import { useCategoryStore } from "@/stores/categoryStore";
 
 const VISIBLE_COUNT = 3;
-const PopularProduct = () => {
-  const categories = [
-    { name: "Smart Watch", active: true },
-    { name: "Speaker" },
-    { name: "Laptops" },
-  ];
+const PopularProduct = ({products}) => {
+  const {categoryGetAll, categories} = useCategoryStore();
+  useEffect(()=>{
+    categoryGetAll();
+  },[])
   // clone items
   const extendedProducts = [
     ...products.slice(-VISIBLE_COUNT),
@@ -71,33 +70,30 @@ const PopularProduct = () => {
         <aside className="col-span-12 md:col-span-2 bg-white rounded-xl p-4 shadow-sm">
           <h3 className="font-semibold mb-4">Categories</h3>
           <ul className="space-y-3">
-            {categories.map((c) => (
+            {categories.slice(0,3).map((c,i) => (
               <li
-                key={c.name}
+                key={i}
                 className={`cursor-pointer text-sm font-medium px-3 py-2 rounded-lg ${
                   c.active
                     ? "bg-blue-50 text-blue-600"
                     : "text-gray-600 hover:bg-gray-100"
                 }`}
               >
-                {c.name}
+                {c.categoryName}
               </li>
             ))}
           </ul>
         </aside>
         {/* Banner */}
-        <div className="col-span-12 md:col-span-3 bg-slate-900 rounded-xl text-white p-6 flex flex-col justify-between">
+        <div className="col-span-12 md:col-span-3 bg-slate-900 rounded-xl text-white p-6 flex flex-col justify-between items-center">
           <div>
-            <span className="text-xs text-orange-400 font-semibold">
-              15% OFF
-            </span>
-            <h2 className="text-2xl font-bold mt-2">Home Speakers</h2>
+            <h2 className="text-2xl font-bold mt-2">Free ship</h2>
             <p className="text-sm text-gray-300 mt-2">
-              From $399 or $16.62/mo. for 24 mo.
+              From $200 or $16.62/mo. for 24 mo.
             </p>
           </div>
           <div className="mt-6">
-            <div className="h-32 bg-orange-400 rounded-full" />
+            <img src="../../public/images/freshbite-service3.webp" alt="" />
           </div>
         </div>
       {/* Products */}

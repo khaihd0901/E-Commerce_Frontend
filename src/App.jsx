@@ -15,6 +15,7 @@ import CheckOut from "./pages/CheckOut";
 import ProtectedRoute from "./components/ProtectedRoute";
 import VerifyEmail from "./pages/VerifyEmail";
 import OrderHistory from "./pages/OrderHistory/OrderHistory";
+import ScrollToTop from "./components/ScrollToTop";
 
 function App() {
 
@@ -22,6 +23,7 @@ function App() {
     <>
       <Toaster richColors />
       <BrowserRouter>
+      <ScrollToTop/>
         <Routes>
           <Route path ="/verify-email/:token" element={<VerifyEmail/>} />
           <Route path="/" element={<Layout />}>
@@ -31,7 +33,7 @@ function App() {
             <Route path="/contact" element={<Contact />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/products" element={<OurShop />} />
-            <Route path="/product/:id" element={<ProductDetail />} />
+            <Route path="/products/:id" element={<ProductDetail />} />
 
             {/* private route */}
             <Route element={<ProtectedRoute/>}>

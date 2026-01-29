@@ -18,40 +18,29 @@ const ProductDetail = () => {
   }, [product]);
   return (
     <>
-      {/* <BreadCrumb title={prod.title}/> */}
+      <BreadCrumb/>
 
       {/* Product Detail */}
       <div className="py-8">
-        <div className="grid grid-cols-2 mt-8 rounded-xl shadow bg-white relative">
+        <div className="grid grid-cols-2 rounded-xl shadow bg-white relative">
           <div className="grid grid-cols-2 px-4 py-4 gap-4">
-            <div className="col-span-2">
+            <div className="col-span-2 relative">
               <img
                 src={product?.images[0].url}
                 alt=""
                 className="border border-gray-200"
               />
-            </div>
-            <div className="col-span-2 grid grid-cols-2 gap-4">
-              {product?.images.map((img, index) => (
-                <div className="">
-                  <img
-                    key={index}
-                    src={img.url}
-                    alt="product"
-                    className="border border-gray-200 col-span-1"
-                  />
-                </div>
-              ))}
+            <img src="../../public/images/organic.png" alt="organic" className="max-w-20 absolute top-3 right-3" />
             </div>
           </div>
-          <div className="col-span-1 px-4 py-4">
+          <div className="col-span-1 px-4 py-4 relative">
             {/* RIGHT – Product Info */}
             <div className="space-y-4">
               <h1 className="text-xl font-semibold">
-                Kids Headphones Bulk 10 Pack Multi Colored For Students
+                {product?.title}
               </h1>
 
-              <p className="text-lg font-bold">$100.00</p>
+              <p className="text-lg font-bold">${product?.price}</p>
 
               {/* Rating */}
               <div className="flex items-center gap-2 text-sm">
@@ -68,60 +57,50 @@ const ProductDetail = () => {
               <hr />
 
               {/* Meta Info */}
-              <div className="space-y-2 text-sm ">
+              <div className="space-y-4 text-sm ">
                 <p>
-                  <span className="font-semibold">Type:</span> Headsets
+                  <span className="font-semibold">Type: {product?.category.categoryName}</span> 
                 </p>
                 <p>
-                  <span className="font-semibold">Brand:</span> Havells
+                  <span className="font-semibold">Brand:</span> {product?.brand.name}
                 </p>
+                <div className="flex gap-2 items-center">
+                  <div className="font-semibold">Tags:</div> {product?.tags.map((t)=> (
+                    <span className="px-4 py-2 bg-gray-100 rounded shadow">{t}</span>
+                  ))}
+                </div>
                 <p>
-                  <span className="font-semibold">Categories:</span> airpods,
-                  camera's, Computers & Laptop, headphones, mini speaker, our
-                  store, Portable Speakers, smart phones, Smart Television,
-                  Smartwatches
-                </p>
-                <p>
-                  <span className="font-semibold">Tags:</span> headphones,
-                  laptop, mobile, oppo, speaker
-                </p>
-                <p>
-                  <span className="font-semibold">SKU:</span> SKU027
+                  <span className="font-semibold">Sold: {product?.sold}</span>
                 </p>
                 <p className="text-green-600">
                   <span className="font-semibold text-gray-800">
                     Availability:
                   </span>{" "}
-                  541 In Stock
+                  {product?.stock} In Stock
                 </p>
               </div>
 
-              {/* Size */}
-              <div>
-                <p className="font-semibold text-sm mb-2">Size</p>
-                <div className="flex gap-2">
-                  <button className="px-4 py-1 border rounded hover:bg-gray-100">
-                    S
-                  </button>
-                  <button className="px-4 py-1 border rounded hover:bg-gray-100">
-                    L
-                  </button>
-                </div>
+              <div className="flex gap-2 items-center">
+                <p className="font-semibold text-sm">Origin: </p>
+                <span className="text-sm">{product?.origin}</span>
               </div>
 
-              {/* Color */}
-              <div>
-                <p className="font-semibold text-sm mb-2">Color</p>
-                <div className="flex gap-2">
-                  <span className="w-6 h-6 rounded-full bg-black cursor-pointer"></span>
-                  <span className="w-6 h-6 rounded-full bg-red-500 cursor-pointer"></span>
-                  <span className="w-6 h-6 rounded-full bg-blue-500 cursor-pointer"></span>
-                </div>
+              <div className="flex gap-2 items-center">
+                <p className="font-semibold text-sm">Farm Name: </p>
+                <span className="text-sm">{product?.farmName}</span>
+              </div>
+              <div className="flex gap-2 items-center">
+                <p className="font-semibold text-sm">Status: </p>
+                <span className="text-sm capitalize">{product?.status}</span>
               </div>
 
+              <div className="flex gap-2 items-center">
+                <p className="font-semibold text-sm">Storage: </p>
+                <span className="text-sm capitalize">{product?.storage}</span>
+              </div>
               {/* Actions */}
               <div className="flex gap-4 pt-4 items-center">
-                <p className="font-semibold text-sm mx-2">Quantity</p>
+                <p className="font-semibold text-sm">Quantity</p>
                 <input
                   type="number"
                   defaultValue={1}

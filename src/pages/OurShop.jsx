@@ -14,10 +14,10 @@ const OurShop = () => {
   }, [productGetAll]);
   console.log("products", products)
 
-  if (isLoading) return <p>Loading...</p>;
+  if (isLoading) return <p className="h-screen">Loading...</p>;
   return (
     <>
-      <BreadCrumb title="Our Store" />
+      <BreadCrumb/>
       <div className="grid grid-cols-4 gap-4 py-5">
         <FilterSidebar />
         <div className="col-span-3 grid gap-4">

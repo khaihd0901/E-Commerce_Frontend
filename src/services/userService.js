@@ -14,15 +14,30 @@ const userResetPassword = async (OTP,password,email) => {
   return res.data;
 };
 const userUpdate = async (id,data) =>{
-  console.log(id)
   const res = await api.put(`user/update/${id}`, data)
+  return res.data
+}
+const userAddProductToWishList = async(prodId)=>{
+  console.log(prodId)
+  const res = await api.post(`user/add-wishlist`,{prodId})
+  return res.data
+}
+const userGetAllWishList = async() =>{
+  const res = await api.get(`user/wishlist`)
+  return res.data.wishList
+}
+const userRemoveProductFromWishList = async (prodId) =>{
+  const res = await api.put(`user/remove-wishlist`, {prodId})
   return res.data
 }
 const userService = {
   userForgotPassword,
   userVerifyOTP,
   userResetPassword,
-  userUpdate
+  userUpdate,
+  userAddProductToWishList,
+  userGetAllWishList,
+  userRemoveProductFromWishList
 };
 
 export default userService;

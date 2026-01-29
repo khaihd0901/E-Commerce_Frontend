@@ -1,10 +1,10 @@
 import { useState, useEffect, useRef } from "react";
-import {products} from "../lib/testData";
 import ProductCard from "./ProductCard";
 
-const VISIBLE_COUNT = 4;
+const VISIBLE_COUNT = 5;
 
-const FeaturedCollection = () => {
+const FeaturedCollection = ({products}) => {
+  console.log("products", products)
   // clone items
   const extendedProducts = [
     ...products.slice(-VISIBLE_COUNT),
@@ -71,13 +71,13 @@ const FeaturedCollection = () => {
             transition ? "transition-transform duration-300" : ""
           }`}
           style={{
-            transform: `translateX(-${index * 25}%)`,
+            transform: `translateX(-${index * 20}%)`,
           }}
         >
           {extendedProducts.map((product, i) => (
             <div
               key={i}
-              className="w-1/4 px-1 shrink-0"
+              className="w-1/5 px-1 shrink-0"
             >
               <ProductCard product={product} />
             </div>

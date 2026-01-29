@@ -1,46 +1,6 @@
+import { useCategoryStore } from "@/stores/categoryStore";
+import { ChevronLast, ChevronLeft, ChevronRight } from "lucide-react";
 import React, { useState } from "react";
-
-const colors = [
-  "#000000",
-  "#00FFFF",
-  "#1F2937",
-  "#1E3A8A",
-  "#374151",
-  "#7C2D12",
-  "#4B5563",
-  "#2563EB",
-  "#6B7280",
-  "#3B82F6",
-  "#9CA3AF",
-  "#10B981",
-  "#EF4444",
-  "#F59E0B",
-  "#EC4899",
-  "#D1D5DB",
-  "#F87171",
-  "#FBBF24",
-  "#A7F3D0",
-  "#FDBA74",
-];
-
-const sizes = [
-  { label: "S", count: 10 },
-  { label: "M", count: 13 },
-  { label: "L", count: 10 },
-  { label: "XL", count: 5 },
-  { label: "XXL", count: 5 },
-];
-const tags = [
-  "Headphones",
-  "Laptop",
-  "Mobile",
-  "Oppo",
-  "Speaker",
-  "Tablet",
-  "Vivo",
-  "Wire",
-];
-const categories = ["Home", "Our Store", "Blogs", "Contact"];
 const randomProducts = [
   {
     id: 1,
@@ -54,9 +14,15 @@ const randomProducts = [
     price: 100,
     image: "/images/cat-watch.png",
   },
+    {
+    id: 3,
+    title: "APPLE Watch Series 2 - 42 MM Stainless Steel...",
+    price: 100,
+    image: "/images/cat-gaming.png",
+  },
 ];
 const FilterSidebar = () => {
-  const [activeTag, setActiveTag] = useState(null);
+  const { categories } = useCategoryStore();
   return (
     <>
       <div className="col-span-1 flex flex-col justify-between row-span-3 gap-4 self-start">
@@ -65,12 +31,14 @@ const FilterSidebar = () => {
             <h2 className="font-semibold text-lg mb-4">Shop By Categories</h2>
 
             <ul className="space-y-2 text-sm text-gray-600 leading-8">
-              {categories.map((item, index) => (
+              {categories.map((cate, index) => (
                 <li
                   key={index}
-                  className="cursor-pointer hover:text-black transition"
+                  className="cursor-pointer w-full flex items-center gap-1 hover:text-black transition"
                 >
-                  {item}
+                  <ChevronRight className="w-5" />
+                  {cate.categoryName}
+                  <span>[{cate.products.length}]</span>
                 </li>
               ))}
             </ul>
@@ -82,15 +50,19 @@ const FilterSidebar = () => {
 
             {/* Availability */}
             <div>
-              <h3 className="font-semibold mb-2">Availability</h3>
+              <h3 className="font-semibold mb-2">Status</h3>
               <div className="space-y-1 text-sm">
                 <label className="flex items-center gap-2">
                   <input type="checkbox" />
-                  In stock (21)
+                  Is Organic (21)
                 </label>
                 <label className="flex items-center gap-2">
                   <input type="checkbox" />
-                  Out of stock (1)
+                  Discount (21)
+                </label>
+                <label className="flex items-center gap-2">
+                  <input type="checkbox" />
+                  Available (21)
                 </label>
               </div>
             </div>
@@ -111,36 +83,9 @@ const FilterSidebar = () => {
                 />
               </div>
             </div>
-
-            {/* Color */}
-            <div>
-              <h3 className="font-semibold mb-2">Color</h3>
-              <div className="grid grid-cols-6 gap-2">
-                {colors.map((color, index) => (
-                  <button
-                    key={index}
-                    className="w-6 h-6 rounded-full border"
-                    style={{ backgroundColor: color }}
-                  />
-                ))}
-              </div>
-            </div>
-
-            {/* Size */}
-            <div>
-              <h3 className="font-semibold mb-2">Size</h3>
-              <div className="space-y-1 text-sm">
-                {sizes.map((size, index) => (
-                  <label key={index} className="flex items-center gap-2">
-                    <input type="checkbox" />
-                    {size.label} ({size.count})
-                  </label>
-                ))}
-              </div>
-            </div>
           </div>
         </div>
-        <div className="">
+        {/* <div className="">
           <div className="bg-white p-4 rounded-xl shadow-sm h-full">
             <h2 className="font-semibold text-lg mb-4">Product Tag</h2>
 
@@ -163,10 +108,10 @@ const FilterSidebar = () => {
               ))}
             </div>
           </div>
-        </div>
+        </div> */}
         <div className="">
           <div className="bg-white p-4 rounded-xl shadow-sm h-full">
-            <h2 className="font-semibold text-lg mb-4">Random Products</h2>
+            <h2 className="font-semibold text-lg mb-4">Recommend Products</h2>
 
             <div className="space-y-4">
               {randomProducts.map((product) => (
