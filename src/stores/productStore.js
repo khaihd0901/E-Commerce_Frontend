@@ -13,13 +13,14 @@ export const useProductStore = create((set, get) => ({
       products: data,
     });
   },
-    setProduct: (data) => {
+  setProduct: (data) => {
     set({
       product: data,
     });
   },
   clearState: () => {
     set({
+      searchResults: [],
       products: [],
       product: null,
       isLoading: false,
@@ -30,9 +31,37 @@ export const useProductStore = create((set, get) => ({
   productGetAll: async () => {
     try {
       set({ isLoading: true });
-      const data = await productService.productGetAll();
+      const res = await productService.productGetAll();
+      set({ products: res });
+    } catch (err) {
+      console.log(err);
+      set({ isError: true });
+    } finally {
+      set({
+        isLoading: false,
+      });
+    }
+  },
+productSearch: async (queryString = "") => {
+  set({ isLoading: true });
+
+  const res = await productService.productSearch(queryString);
+
+  set({
+    searchResults: res,
+    isLoading: false,
+  });
+
+  return res;
+},
+
+  productGetById: async (id) => {
+    try {
+      set({ isLoading: true });
+      const data = await productService.productGetById(id);
+      console.log("data", data);
       if (data) {
-        get().setProducts(data);
+        get().setProduct(data);
       }
     } catch (err) {
       console.log(err);
@@ -43,21 +72,4 @@ export const useProductStore = create((set, get) => ({
       });
     }
   },
-  productGetById: async (id) =>{
-     try {
-      set({ isLoading: true });
-      const data = await productService.productGetById(id);
-      console.log("data", data)
-      if (data) {
-        get().setProduct(data)
-      }
-    } catch (err) {
-      console.log(err);
-      set({ isError: true });
-    } finally {
-      set({
-        isLoading: false,
-      });
-    }
-  }
 }));

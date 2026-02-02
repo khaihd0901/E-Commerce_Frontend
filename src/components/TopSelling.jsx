@@ -3,18 +3,24 @@ import ProductCard from "./ProductCard";
 
 const VISIBLE_COUNT = 5;
 
-const FeaturedCollection = ({products}) => {
-  console.log("products", products)
+const TopSelling = ({ products }) => {
+  const [index, setIndex] = useState(VISIBLE_COUNT);
+  const [transition, setTransition] = useState(true);
+  const sliderRef = useRef(null);
+
   // clone items
   const extendedProducts = [
     ...products.slice(-VISIBLE_COUNT),
     ...products,
     ...products.slice(0, VISIBLE_COUNT),
   ];
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setIndex((prev) => prev + 1);
+    }, 1500);
 
-  const [index, setIndex] = useState(VISIBLE_COUNT);
-  const [transition, setTransition] = useState(true);
-  const sliderRef = useRef(null);
+    return () => clearInterval(interval);
+  }, []);
 
   const handleNext = () => {
     setIndex((prev) => prev + 1);
@@ -53,7 +59,7 @@ const FeaturedCollection = ({products}) => {
     <div className="py-8 overflow-hidden">
       {/* Header */}
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold">Featured Collection</h2>
+        <h2 className="text-2xl font-bold">Top Selling</h2>
         <div className="flex gap-3">
           <button onClick={handlePrev}>
             <i className="fa-solid fa-chevron-left hover:text-[var(--color-febd69)]" />
@@ -75,10 +81,7 @@ const FeaturedCollection = ({products}) => {
           }}
         >
           {extendedProducts.map((product, i) => (
-            <div
-              key={i}
-              className="w-1/5 px-1 shrink-0"
-            >
+            <div key={i} className="w-1/5 px-1 shrink-0">
               <ProductCard product={product} />
             </div>
           ))}
@@ -88,4 +91,4 @@ const FeaturedCollection = ({products}) => {
   );
 };
 
-export default FeaturedCollection;
+export default TopSelling;

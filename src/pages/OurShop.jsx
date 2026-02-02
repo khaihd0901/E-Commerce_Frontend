@@ -2,74 +2,72 @@ import { BreadCrumb } from "@/components/BreadCrumb";
 import FilterSidebar from "@/components/FilterSidebar";
 import ProductCard from "@/components/ProductCard";
 import { useProductStore } from "@/stores/productStore";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 const OurShop = () => {
-  const [value, setValue] = useState("default");
-  const products = useProductStore((state) => state.products);
-  const productGetAll = useProductStore((state) => state.productGetAll);
-  const isLoading = useProductStore((state) => state.isLoading);
-  useEffect(() => {
-    productGetAll();
-  }, [productGetAll]);
-  console.log("products", products)
+  const [filters, setFilters] = useState({
+    category: "",
+    price_gte: "",
+    price_lte: "",
+    isOrganic: false,
+    discount: false,
+    sort: "-harvestDate",
+  });
 
-  if (isLoading) return <p className="h-screen">Loading...</p>;
+  const { searchResults, productSearch, isLoading } = useProductStore();
+console.log(searchResults)
+  useEffect(() => {
+    const params = new URLSearchParams();
+
+    if (filters.category) params.append("category", filters.category);
+    if (filters.price_gte) params.append("price[gte]", filters.price_gte);
+    if (filters.price_lte) params.append("price[lte]", filters.price_lte);
+
+    if (filters.isOrganic) params.append("isOrganic", true);
+    if (filters.discount) params.append("discount", true);
+
+    if (filters.sort) params.append("sort", filters.sort);
+    productSearch(params.toString());
+  }, [filters, productSearch]);
+
   return (
     <>
-      <BreadCrumb/>
+      <BreadCrumb />
       <div className="grid grid-cols-4 gap-4 py-5">
-        <FilterSidebar />
+        <FilterSidebar filters={filters} setFilters={setFilters} />
+
         <div className="col-span-3 grid gap-4">
-          <div className="col-span-3 shadow-sm rounded-xl h-fit">
-            <div className="bg-white flex justify-between items-center py-4 px-4">
-              <div className="flex items-center gap-5 sticky top-4 h-fit">
-                <label className="text-sm font-semibold mb-1">Sort By:</label>
-                <select
-                  value={value}
-                  onChange={(e) => setValue(e.target.value)}
-                  className="w-56 px-3 py-2 border border-gray-300 rounded-lg
-                   text-sm focus:outline-none bg-white"
-                >
-                  <option value="default">Default</option>
-                  <option value="price-low-high">Price: Low to High</option>
-                  <option value="price-high-low">Price: High to Low</option>
-                  <option value="latest">Latest</option>
-                  <option value="rating">Best Rating</option>
-                </select>
-              </div>
-              <div className="flex items-center gap-2">
-                <p className="text-[14px]">{products?.length} products</p>
-              </div>
+          {/* SORT */}
+          <div className="shadow-sm rounded-xl bg-white py-4 px-4 flex justify-between">
+            <div className="flex items-center gap-4">
+              <label className="font-semibold text-sm">Sort By:</label>
+              <select
+                value={filters.sort}
+                onChange={(e) =>
+                  setFilters((prev) => ({ ...prev, sort: e.target.value }))
+                }
+                className="border rounded px-3 py-2 text-sm"
+              >
+                <option value="-harvestDate">Latest</option>
+                <option value="price">Price: Low → High</option>
+                <option value="-price">Price: High → Low</option>
+                <option value="-rating">Best Rating</option>
+              </select>
             </div>
-          </div>
-          {/* List Products */}
-          <div className="col-span-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 row-span-10 gap-4">
-            {products?.map((product) => (
-                <ProductCard product={product} key={product._id} />
-            ))}
+
+            <p className="text-sm">{searchResults?.length} products</p>
           </div>
 
-          <div className="bg-white rounded-xl shadow col-span-3 row-span-1 h-fit">
-            <div className="flex justify-between items-center py-2 px-4">
-              <p>Showing 15 of 21</p>
-              <div className="flex gap-4 py-2">
-                <button>
-                  <i className="fa-solid fa-chevron-left hover:text-[var(--color-febd69)]" />
-                </button>
-
-                <div className="flex gap-5">
-                  <span>1</span>
-                  <span className="bg-black text-white w-7 text-center rounded-full">2</span>
-                  <span>3</span>
-                </div>
-
-                <button>
-                  <i className="fa-solid fa-chevron-right hover:text-[var(--color-febd69)]" />
-                </button>
-              </div>
+          {/* PRODUCTS */}
+          {isLoading ? (
+            <div>Loading...</div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              {searchResults?.map((product) => (
+                <ProductCard key={product._id} product={product} />
+              ))}
             </div>
-          </div>
+          )}
         </div>
       </div>
     </>

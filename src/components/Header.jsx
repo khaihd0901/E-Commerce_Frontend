@@ -1,8 +1,9 @@
 import { useAuthStore } from "@/stores/authStore";
-import { useCategoryStore } from "@/stores/categoryStore";
 
 import { useEffect, useRef, useState } from "react";
-import { Link, NavLink, useNavigate } from "react-router";
+import { Link, NavLink } from "react-router";
+import { useDebounce } from "@/hooks/useDebounce";
+
 import {
   Heart,
   LogInIcon,
@@ -13,36 +14,66 @@ import {
   ShoppingBasket,
   User,
 } from "lucide-react";
-import { useUserStore } from "@/stores/userStore";
+import { useProductStore } from "@/stores/productStore";
+import ProductCard from "./ProductCard";
+
 const Header = () => {
   const [query, setQuery] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
+
   const popupRef = useRef(null);
-  const navigate = useNavigate();
-  const MOCK_PRODUCTS = [
-    { id: 1, name: "iPhone 15 Pro" },
-    { id: 2, name: "Samsung Galaxy S24" },
-    { id: 3, name: "MacBook Pro M3" },
-    { id: 4, name: "AirPods Pro" },
-  ];
-  const { accessToken, user, authRefreshToken, authMe, authSignOut } =
-    useAuthStore();
-  const { categoryGetAll, categories } = useCategoryStore();
-  const wishList = useUserStore((s) => s.wishList);
+  const debouncedQuery = useDebounce(query, 500);
+  const {
+    accessToken,
+    user,
+    authRefreshToken,
+    authMe,
+    authSignOut,
+  } = useAuthStore();
+  const {productSearch } = useProductStore();
+
   const init = async () => {
     if (!accessToken) {
       await authRefreshToken();
     }
+
     if (accessToken && !user) {
+      console.log("dont have user");
       await authMe();
     }
   };
-  console.log(categories);
+
   useEffect(() => {
-    categoryGetAll();
     init();
   }, []);
+
+useEffect(() => {
+  const fetchSuggestions = async () => {
+    if (!debouncedQuery.trim()) {
+      setSuggestions([]);
+      setShowPopup(false);
+      return;
+    }
+
+    try {
+      const params = new URLSearchParams();
+      params.append("search", debouncedQuery);
+      params.append("limit", 4);
+
+      const data = await productSearch(params.toString());
+
+      setSuggestions(data);
+      setShowPopup(true);
+    } catch (err) {
+      console.error(err);
+      setSuggestions([]);
+    }
+  };
+
+  fetchSuggestions();
+}, [debouncedQuery]);
+
 
   const handleLogout = async () => {
     try {
@@ -51,22 +82,9 @@ const Header = () => {
       console.log(err);
     }
   };
+
   const handleSearchChange = (e) => {
-    const value = e.target.value;
-    setQuery(value);
-
-    if (!value.trim()) {
-      setSuggestions([]);
-      setShowPopup(false);
-      return;
-    }
-
-    const filtered = MOCK_PRODUCTS.filter((item) =>
-      item.name.toLowerCase().includes(value.toLowerCase()),
-    );
-
-    setSuggestions(filtered);
-    setShowPopup(true);
+    setQuery(e.target.value);
   };
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -76,8 +94,19 @@ const Header = () => {
     };
 
     document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
   }, []);
+
+  // if (starting || isLoading) {
+  //   return (
+  //     <div className="flex h-screen items-center justify-center">
+  //       Loading ...
+  //     </div>
+  //   );
+  // }
+
   return (
     <>
       <header className="header-top-strip py-4">
@@ -99,24 +128,48 @@ const Header = () => {
               greenstore
             </h2>
           </NavLink>
-          <div className="flex relative">
-            <input
-              ref={popupRef}
-              onChange={handleSearchChange}
-              type="text"
-              placeholder="Search products..."
-              className="w-100 bg-white p-2 focus:ring-0 outline-0 rounded-l-md"
-            />
-            <button className="search-btn cursor-pointer hover:text-black p-2 rounded-r-md">
-              <Search className="" />
-            </button>
+          <div className="relative" ref={popupRef}>
+            {/* Search input */}
+            <div className="flex">
+              <input
+                value={query}
+                onChange={handleSearchChange}
+                type="text"
+                placeholder="Search products..."
+                className="w-100 bg-white p-2 focus:ring-0 outline-0 rounded-l-md"
+                onFocus={() => setShowPopup(true)}
+              />
+              <button className="search-btn cursor-pointer hover:text-black p-2 rounded-r-md">
+                <Search />
+              </button>
+            </div>
+
+            {/* Suggestions */}
+            {showPopup && (
+              <div className="absolute w-screen bg-gray-100 shadow-lg rounded-b-xl mt-2 z-50 px-2 py-4">
+                <h1 className="text-xl capitalize font-bold">Suggestion</h1>
+
+                {suggestions.length > 0 ? (
+                  <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                    {suggestions.map((item) => (
+                      <ProductCard key={item._id} product={item} />
+                    ))}
+                  </div>
+                ) : (
+                  <div className="mt-4 text-sm text-gray-500">
+                    No products found
+                  </div>
+                )}
+              </div>
+            )}
           </div>
+
           <div className="flex justify-around items-center gap-4">
             <Link
               to="wish-list"
               className="flex items-center text-white capitalize gap-1"
             >
-              <Heart className={wishList.length > 0 ? `text-red-500` : ``} />
+              <Heart className="" />
               <p>wish list</p>
             </Link>
             <Link
@@ -195,24 +248,17 @@ const Header = () => {
             )}
           </div>
         </div>
-
-        {showPopup && suggestions.length > 0 && (
-          <div className="absolute left-0 w-full bg-white shadow-lg rounded-md mt-4 z-50 px-2 py-4">
-            <ul>
+        {/* 
+        {showPopup && (
+          <div className="absolute left-0 w-full bg-gray-100 shadow-lg rounded-b-xl mt-4 z-50 px-2 py-4">
+            <h1 className="text-xl capitalize font-bold mt-4">suggestion</h1>
+            <div className="mt-6 grid grid-cols-1 sm:gird-cols-2 lg:grid-cols-4 gap-3">
               {suggestions.map((item) => (
-                <li
-                  key={item.id}
-                  onClick={() => {
-                    navigate(`/products/${item.id}`);
-                    setShowPopup(false);
-                    setQuery("");
-                  }}
-                  className="px-4 py-2 cursor-pointer hover:bg-gray-200 text-sm rounded-md"
-                >
-                  {item.name}
-                </li>
+                <>
+                  <ProductCard product={item} />
+                </>
               ))}
-            </ul>
+            </div>
           </div>
         )}
 
@@ -220,7 +266,7 @@ const Header = () => {
           <div className="absolute top-full left-0 w-full bg-white shadow-lg rounded-md mt-1 p-3 text-sm text-gray-500">
             No products found
           </div>
-        )}
+        )} */}
       </header>
       <header className="header-bottom py-4">
         <div className="container mx-auto">

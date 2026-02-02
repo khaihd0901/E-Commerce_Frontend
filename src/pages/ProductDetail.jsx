@@ -30,7 +30,13 @@ const ProductDetail = () => {
                 alt=""
                 className="border border-gray-200"
               />
-            <img src="../../public/images/organic.png" alt="organic" className="max-w-20 absolute top-3 right-3" />
+            {product?.isOrganic && (
+              <img
+                src="../../public/images/organic.png"
+                alt="organic"
+                className="max-w-20 absolute top-3 right-3"
+              />
+            )}
             </div>
           </div>
           <div className="col-span-1 px-4 py-4 relative">

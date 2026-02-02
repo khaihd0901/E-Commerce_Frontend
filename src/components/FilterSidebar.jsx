@@ -1,6 +1,5 @@
-import { useCategoryStore } from "@/stores/categoryStore";
+// import { useCategoryStore } from "@/stores/categoryStore";
 import { ChevronLast, ChevronLeft, ChevronRight } from "lucide-react";
-import React, { useState } from "react";
 const randomProducts = [
   {
     id: 1,
@@ -14,19 +13,19 @@ const randomProducts = [
     price: 100,
     image: "/images/cat-watch.png",
   },
-    {
+  {
     id: 3,
     title: "APPLE Watch Series 2 - 42 MM Stainless Steel...",
     price: 100,
     image: "/images/cat-gaming.png",
   },
 ];
-const FilterSidebar = () => {
-  const { categories } = useCategoryStore();
+const FilterSidebar = ({ filters, setFilters }) => {
+  // const { categories } = useCategoryStore();
   return (
     <>
       <div className="col-span-1 flex flex-col justify-between row-span-3 gap-4 self-start">
-        <div className="">
+        {/* <div className="">
           <div className="bg-white p-4 h-fit rounded-xl shadow-sm">
             <h2 className="font-semibold text-lg mb-4">Shop By Categories</h2>
 
@@ -43,7 +42,7 @@ const FilterSidebar = () => {
               ))}
             </ul>
           </div>
-        </div>
+        </div> */}
         <div className="">
           <div className="bg-white p-4 rounded-xl shadow-sm space-y-6 h-full">
             <h2 className="font-semibold text-lg">Filter By</h2>
@@ -51,19 +50,49 @@ const FilterSidebar = () => {
             {/* Availability */}
             <div>
               <h3 className="font-semibold mb-2">Status</h3>
-              <div className="space-y-1 text-sm">
+              <div className="space-y-3 text-sm">
                 <label className="flex items-center gap-2">
-                  <input type="checkbox" />
-                  Is Organic (21)
+                  <input
+                    type="checkbox"
+                    checked={filters.isOrganic}
+                    onChange={(e) =>
+                      setFilters((prev) => ({
+                        ...prev,
+                        isOrganic: e.target.checked,
+                        page: 1,
+                      }))
+                    }
+                  />
+                  Is Organic
                 </label>
                 <label className="flex items-center gap-2">
-                  <input type="checkbox" />
-                  Discount (21)
+                  <input
+                    type="checkbox"
+                    checked={filters.discount}
+                    onChange={(e) =>
+                      setFilters((prev) => ({
+                        ...prev,
+                        discount: e.target.checked,
+                        page: 1,
+                      }))
+                    }
+                  />
+                  Discount
                 </label>
-                <label className="flex items-center gap-2">
-                  <input type="checkbox" />
-                  Available (21)
-                </label>
+                {/* <label className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    checked={filters.available}
+                    onChange={(e) =>
+                      setFilters((prev) => ({
+                        ...prev,
+                        available: e.target.checked,
+                        page: 1,
+                      }))
+                    }
+                  />
+                  Available
+                </label> */}
               </div>
             </div>
 
@@ -75,11 +104,26 @@ const FilterSidebar = () => {
                   type="number"
                   placeholder="$ From"
                   className="w-1/2 border rounded px-2 py-1 text-sm"
+                  onBlur={(e) =>
+                    setFilters((prev) => ({
+                      ...prev,
+                      minPrice: e.target.value,
+                      page: 1,
+                    }))
+                  }
                 />
+
                 <input
                   type="number"
                   placeholder="$ To"
                   className="w-1/2 border rounded px-2 py-1 text-sm"
+                  onBlur={(e) =>
+                    setFilters((prev) => ({
+                      ...prev,
+                      maxPrice: e.target.value,
+                      page: 1,
+                    }))
+                  }
                 />
               </div>
             </div>
